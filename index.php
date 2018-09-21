@@ -1,11 +1,11 @@
 <?php
 
-	$content = file_get_contents( $_POST['korpus'] ); // Diambil file text
+	$content = file_get_contents('korpus1.txt'); // Diambil file text
 	$content = preg_replace( "/(,|\"|\.|\?|:|!|;|-| - )/", " ", $content ); // menghilangkan tanda baca
 	$content = preg_replace( "/\n/", " ", $content ); // menghilangkan enter
 	$content = preg_replace( "/\s\s+/", " ", $content ); // menghilangkan spasi
 	$content = explode(" ",$content); // memisahkan kata per spasi
-	
+
 	// variabel input $input nanti diisi $content (file text nya)
 	function tokenisasi($input){
 		$results = array();
