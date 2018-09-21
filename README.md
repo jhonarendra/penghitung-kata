@@ -1,2 +1,2 @@
-# penghitung-kata
-Aplikasi penghitung kata pada dokumen dengan PHP
+# Penghitung Kata
+Contoh program penghitung frekuensi kata menggunakan bahasa PHP
