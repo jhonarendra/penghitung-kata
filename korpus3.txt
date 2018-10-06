@@ -1,0 +1,24 @@
+Hai sobat, bertemu kembali dengan saya di blog kesayangan kita ini haha. Masih di topik yang sama yaitu tentang android, tapi akhir-akhir ini saya akan jelaskan kepada sobat tentang version control atau vcs. Dan pada artikel sebelumnya saya telah menjelaskan bagaimana cara mudah mengupload atau menghubungkan project android dengan github dan git. Kali ini saya akan meneruskan penjeasan saya sebelumnya tentang github, yaitu cara mudah clone atau import project dari github ke project android studio kita.
+
+Ketika membuat aplikasi, kita biasanya akan menyimpan project ke dalam penyimpanan dan apabila terdapat perubahan, project yang dibuat kita salin ke dalam folder yang berbeda untuk setiap perubahanya. Nah kali ini kita sudah tidak perlu melakukan hal seperti itu, karena sekarang sudah tersedia tool yang membantu kita dalam mengatur project dan setiap perubahan yang diberikan. Tool ini biasa disebut VCS (Version Control System). Tool ini bisa bisa kita gunakan lewat perantara aplikasi sepeti git, gitlab, github, bitbucket dan aplikasi sejenisnya.
+
+Dengan menggunakan apliaksi vcs ini kita dapat dengan mudah menerapkan perubahan dan mengembalikanya ke kondisi semula tanpa repot mengubahnya secara manual satu persatu. Aplikasi yang digunakan untuk menerapkan vcs juga sudah beredar cukup banyak seperti github dan bitbucket. Dengan memanfaatkan tool ini kita juga  daat dengan mudah membuat project secara bersama dengan orang lain. Walau pun project dibuat dengan orang lain atau team  tetapi jika menerapkan vcs ini maka project yang dibuat antar orang tidak akan tercampur dan saling bertindih.
+
+Untuk itu kita sebagai developer harus tahu tentang hal ini, karena dengan ini pekerjaan kita akan semakin mudah dan efisien. Oke sekarang kita akan membahas bagaimana cara mudah untuk clone atau inport project android dari Github ke apliaksi Android Studio. Caranya mudah sekali, silahkan sobat perhatikan langkah-langkah berikut :
+
+Pertama pastika sobat sudah login github web dan memiliki repository atau project android di dalam akun Github sobat.
+
+Jika sudah memiliki akun dan repository, kemudian di jendela dashboard project, sobat pilih Clone or Download. Salin URL yang tampil kemudian buka aplikasi Android Studio.
+
+Pada menu utama andoroid, pilih menu Check out project from Version Control. Kemudian pilih Github.
+
+Akan tampil jendela dan form tentang data yang dibutuhkan untuk clone project dari github.
+Masukkan url yang telah disalin, kemudian atur folder penyimpanan project hasil clone Github atau inport project dari Github. Terakhir atur nama folder penyimpanan, perludiingat adalah dalam penamaan folder tidak boleh menganding space.
+
+Kemudian pilih Clone dan tunggu sampai prosesnya selesai dan sukses.
+
+Jika kita sudah melakukan clone atau inport project Github. Kita bisa mengakses dan melakukan perubahan pada project dan menerapkanya lagi ke dalam Github. Caranya cukup mudah yaitu dengan menekan tombol save changes di toolbar atas.
+
+Oke bagaimana sobat, sangat mudah bukan, cara ini bisa sobat terapkan untuk berbagai project yang sobat simpan di dalam Github
+
+Terimakasih, sekian artikel saya tentang Cara Mudah Clone Project Android dari Github. Semoga bermanfaat dan dapat membantu sobat yang sedang belajat tentang version control atau git. Jika sobat menyukai artikel ini, silahkan sobat bisa share ke sahabat yang lainnya karena berbagi itu indah..
