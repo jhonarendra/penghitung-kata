@@ -66,7 +66,11 @@ h1 a{
 	float:left;
 	width: 16.666667%;
 }
+<<<<<<< HEAD
 #isi, #table, #form, #word-count, #jenis, #jenis-kata, #stopwordlist, #wordlist, #typelist, #ringkasan, #bobot-kalimat{
+=======
+#isi, #table, #form, #word-count, #jenis, #jenis-kata, #stopwordlist, #wordlist, #typelist{
+>>>>>>> 5ade64f0ae4d92672066204b2a40ae31e69a45bd
 	background: #fff;
 	border-radius: 10px;
 	box-shadow: 0 18px 35px rgba(50,50,93,.1), 0 8px 15px rgba(0,0,0,.07);
@@ -79,7 +83,8 @@ h1 a{
 #table h2{
 	color:#fff;
 }
-#isi, #wordlist, #table{
+
+#isi, #stopwordlist, #wordlist, #table{
 	padding-bottom: 20px;
 }
 .col-6.form{
@@ -89,7 +94,7 @@ h1 a{
 #form form{
 	padding: 20px;
 }
-#word-count, #wordlist, #jenis-kata, #jenis, #stopwordlist, #ringkasan{
+#word-count, #wordlist, #jenis-kata, #jenis{
 	margin-top:40px;
 	min-height: 100px;
 }

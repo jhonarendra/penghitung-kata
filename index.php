@@ -179,6 +179,7 @@
 				}
 				
 
+
 		?>
 
 		<div class="col-6 form">
@@ -200,6 +201,7 @@
 						<div class="scroll">
 							<p style="padding:20px;line-height: 1.5em">
 								<?php
+
 									foreach ($ringkasan as $key) {
 										echo $key."<br />";
 									}
@@ -211,6 +213,7 @@
 						<h2 style="float: left">Jumlah Kata</h2>
 						<p style="text-align: right;padding: 20px;font-size: 40px"><?php echo $wordcount;?></p>
 					</div>
+<<<<<<< HEAD
 					<div id="stopwordlist">
 						<h2>Stopword List</h2>
 						<div class="scroll">
@@ -306,6 +309,7 @@
 										<?php
 
 											$i=1;
+
 											foreach ($statsstem as $term => $count) {
 												if($term != ""){
 										?>

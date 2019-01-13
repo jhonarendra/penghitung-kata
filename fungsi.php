@@ -150,6 +150,7 @@
 
 			//fungsi substr(kata, mulai huruf ke, jumlah huruf)
 
+
 			$kata = $this->hapuspartikel($kata);
 			$kata = $this->hapuspp($kata);
 
