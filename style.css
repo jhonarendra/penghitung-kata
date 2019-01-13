@@ -66,7 +66,7 @@ h1 a{
 	float:left;
 	width: 16.666667%;
 }
-#isi, #table, #form, #word-count, #jenis, #jenis-kata, #stopwordlist, #wordlist, #typelist{
+#isi, #table, #form, #word-count, #jenis, #jenis-kata, #stopwordlist, #wordlist, #typelist, #ringkasan, #bobot-kalimat{
 	background: #fff;
 	border-radius: 10px;
 	box-shadow: 0 18px 35px rgba(50,50,93,.1), 0 8px 15px rgba(0,0,0,.07);
@@ -79,7 +79,7 @@ h1 a{
 #table h2{
 	color:#fff;
 }
-#isi, #stopwordlist, #wordlist, #table{
+#isi, #wordlist, #table{
 	padding-bottom: 20px;
 }
 .col-6.form{
@@ -89,7 +89,7 @@ h1 a{
 #form form{
 	padding: 20px;
 }
-#word-count, #wordlist, #jenis-kata, #jenis{
+#word-count, #wordlist, #jenis-kata, #jenis, #stopwordlist, #ringkasan{
 	margin-top:40px;
 	min-height: 100px;
 }
@@ -130,7 +130,7 @@ table{
 	width: 100%;
 	margin-top: 20px;
 }
-#table td, #table th{
+#table td, #table th, #bobot-kalimat table td, #bobot-kalimat table th{
 	padding: 8px 8px;
 	border-bottom:1px solid #eee;
 

@@ -1,210 +1,112 @@
-﻿<!-- Porter stemming
-Langkah-Langkah Algortima pada Porter Stemmer.
-1. Menghapus Partikel seperti: kah, lah, tah
-2. Menghapus Kata ganti (Possesive Pronoun), seperti ku, mu, nya
-3. Menghapus awalan pertama. Jika tidak ditemukan, maka lanjut ke langkah 4a, dan jika ada maka lanjut ke langkah 4b.
-4. a. Menghapus Awalan kedua, dan dilanjutkan pada langkah 5a
-b. Menghapus akhiran, jika tidak ditemukan maka kata tersebut diasumsikan sebagai kata dasar (rootword). Jika ditemukan maka lanjut ke langkah 5b.
-5. a. Menghapus akhiran dan kata akhir diasumsikan sebagai kata dasar (root word).
-b. Menghapus awalan kedua dan kata akhir diasumsikan sebagai kata dasar (root word)
- -->
-
-
 <?php
+	$starttime = microtime(true);
+	include 'fungsi.php';
+	set_time_limit(0);
+?>
 
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Aplikasi Porter Stemming Bahasa Indonesia</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+	<div id="header">
+		<h1><a href="">Aplikasi Porter Stemming Bahasa Indonesia</a></h1>
+	</div>
+	<div id="content">
+		<?php
+			if(!isset($_POST["submit"])) {
+		?>
+		<div class="col-6 form">
+			<div id="form">
+				<h2>Masukkan Kata</h2>
+				<form action="" method="POST">
+					<input type="text" name="kata" placeholder="Kata">
+					<input type="submit" name="submit" value="kirim">
+				</form>
+			</div>
+		</div>
+		<?php
 
+			} else {
+				$contents = new NLP;
 
-$kataa = $_GET['q'];
+				$plain_text = $_POST['kata'];
 
+				$content = $contents->tokenisasi($plain_text); // $content = kata yg sudah ditokenisasi, misahkan kata2
 
+				$wordcount = count($content);
+				$statsplain = $contents->tf_plain($content); //TF
+				$statsstop = $contents->tf_stopword($content); //TF
+				$statsstem = $contents->tf_stemming($content); //TF
+				
 
+		?>
 
-echo porter($kataa);
+		<div class="col-6 form">
+			<div id="form">
+				<h2>Masukkan Kata</h2>
+				<form action="" method="POST">
+					<input type="text" name="kata" placeholder="Kata">
+					<input type="submit" name="submit" value="kirim">
+				</form>
+			</div>
+		</div>
 
-function porter($kataa){
-// Porter stemming
-// Langkah-Langkah Algortima pada Porter Stemmer.
-// 1. Menghapus Partikel seperti: kah, lah, tah
-// 2. Menghapus Kata ganti (Possesive Pronoun), seperti ku, mu, nya
-// 3. Menghapus awalan pertama. Jika tidak ditemukan, maka lanjut ke langkah 4a, dan jika ada maka lanjut ke langkah 4b.
-// 4. a. Menghapus Awalan kedua, dan dilanjutkan pada langkah 5a
-// b. Menghapus akhiran, jika tidak ditemukan maka kata tersebut diasumsikan sebagai kata dasar (rootword). Jika ditemukan maka lanjut ke langkah 5b.
-// 5. a. Menghapus akhiran dan kata akhir diasumsikan sebagai kata dasar (root word).
-// b. Menghapus awalan kedua dan kata akhir diasumsikan sebagai kata dasar (root word)
+		<div class="col-6 form">
+			<div id="table">
 
+				<div class="header">
+					<h2>Term Frequency</h2>
+					<div class="tab-button">
+						<div id="tab3" class="col-4" style="width: 100%" onclick="showpage3()"><a href="javascript:void(0)">Stemming</a></div>
+						<div style="clear:both"></div>
+					</div>
+				</div>
+				<div class="tab-content">
+					<div id="page3" style="display: block;">
+						<div class="scroll">
+							<table>
+								<tr>
+									<th>Peringkat</th>
+									<th>Kata</th>
+									<th>Frekuensi</th>
+								</tr>
+								<?php
 
+									$i=1;
+									foreach ($statsstem as $term => $count) {
+										if($term != ""){
+								?>
+								<tr>
+									<td><?php echo $i ?></td>
+									<td><?php echo $term ?></td>
+									<td><?php echo $count ?></td>
+								</tr>
+								<?php
+											$i++;
+										}
+									}
+								?>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="clear: both;"></div>
+		<?php } ?>
+	</div><!-- END CONTENT -->
+	<footer>
+		I Putu Iduar Perdana - I Wayan Gunaya - Putu Jhonarendra<br /><br />
 
-$kataa = hapuspartikel($kataa);
-$kataa = hapuspp($kataa);
-$kataa = hapusawalan1($kataa);
-$kataa = hapusawalan2($kataa);
-$kataa = hapusakhiran($kataa);
-
-return $kataa;
-
-
-
-
-  // if (hapuspartikel($kataa)!==null) {
-  //   return hapuspartikel($kataa);
-  // } else if(hapuspp($kataa)!==null){
-  //   return hapuspp($kataa);
-  // } else if(hapusawalan1($kataa)!==null){
-  //   return hapusawalan1($kataa);
-  // } else if (hapusawalan2($kataa)!==null) {
-  //   return hapusawalan2($kataa);
-  // } else if(hapusakhiran($kataa)!==null){
-  //   return hapusakhiran($kataa);
-  // } else {
-  //   return $kataa;
-  // }
-  
-}
-
-function cari($kata){
-  $dbServer = "localhost";
-  $dbUser = "root";
-  $dbPass = "";
-  $dbName = "tesonline";
-  $dbKon = mysqli_connect($dbServer, $dbUser, $dbPass, $dbName); 
- $hasil = mysqli_num_rows(mysqli_query($dbKon, "SELECT * FROM tb_katadasar WHERE katadasar='$kata'")); //membuat variabel $hasil untuk menampilkan hasil mengambil kata dasar dari database
- return $hasil; //mengeksekusi variabel $hasil
-}
-//langkah 1 - hapus partikel
-function hapuspartikel($kata){
-if(cari($kata)!=1){
- if((substr($kata, -3) == 'kah' )||( substr($kata, -3) == 'lah' )||( substr($kata, -3) == 'pun' )){
-  $kata = substr($kata, 0, -3);   
-  }
- }
- return $kata;
-
-}
-
-//langkah 2 - hapus possesive pronoun
-function hapuspp($kata){
-if(cari($kata)!=1){
- if(strlen($kata) > 4){
- if((substr($kata, -2)== 'ku')||(substr($kata, -2)== 'mu')){
-  $kata = substr($kata, 0, -2);
- }else if((substr($kata, -3)== 'nya')){
-  $kata = substr($kata,0, -3);
- }
-  }
-}
-
-  return $kata;
-}
-
-//langkah 3 hapus first order prefiks (awalan pertama)
-function hapusawalan1($kata){
-if(cari($kata)!=1){
-
- if(substr($kata,0,4)=="meng"){
-  if(substr($kata,4,1)=="e"||substr($kata,4,1)=="u"){
-  $kata = "k".substr($kata,4);
-  }else{
-  $kata = substr($kata,4);
-  }
- }else if(substr($kata,0,4)=="meny"){
-  $kata = "s".substr($kata,4);
- }else if(substr($kata,0,3)=="men"){
-  $kata = "t".substr($kata,3);
- }
- /*else if(substr($kata,0,3)=="mem"){
-  if(substr($kata,3,1)=="a" || substr($kata,3,1)=="i" || substr($kata,3,1)=="e" || substr($kata,3,1)=="u" || substr($kata,3,1)=="o"){
-   if(substr($kata,3,1)=="a" || substr($kata,3,1)=="i" || substr($kata,3,1)=="e" || substr($kata,3,1)=="u" || substr($kata,3,1)=="o"){
-   $kata = "m".substr($kata,3);
-   }
-  }else{
-   $kata = substr($kata,3);
-  }
- }*/
- else if(substr($kata,0,3)=="mem"){
-  if(substr($kata,3,1)=="a"){
-  $kata = "m".substr($kata,3);
-  }
-  else if(substr($kata,3,2)=="in"){
-  $kata = "m".substr($kata,3);
-  }
-  else if(substr($kata,3,1)=="i"){
-  $kata = "p".substr($kata,3);
-  }
-  else{
-   $kata = substr($kata,3);
-  }
- }
- else if(substr($kata,0,2)=="me"){
-  $kata = substr($kata,2);
- }else if(substr($kata,0,4)=="peng"){
-  if(substr($kata,4,1)=="e" || substr($kata,4,1)=="a"){
-  $kata = "k".substr($kata,4);
-  }else{
-  $kata = substr($kata,4);
-  }
- }else if(substr($kata,0,4)=="peny"){
-  $kata = "s".substr($kata,4);
- }else if(substr($kata,0,3)=="pen"){
-  if(substr($kata,3,1)=="a" || substr($kata,3,1)=="i" || substr($kata,3,1)=="e" || substr($kata,3,1)=="u" || substr($kata,3,1)=="o"){
-   $kata = "t".substr($kata,3);
-  }else{
-   $kata = substr($kata,3);
-  }
- }else if(substr($kata,0,3)=="pem"){
-  if(substr($kata,3,1)=="a" || substr($kata,3,1)=="i" || substr($kata,3,1)=="e" || substr($kata,3,1)=="u" || substr($kata,3,1)=="o"){
-   $kata = "p".substr($kata,3);
-  }else{
-   $kata = substr($kata,3);
-  }
- }else if(substr($kata,0,2)=="di"){
-  $kata = substr($kata,2);
- }else if(substr($kata,0,3)=="ter"){
-  $kata = substr($kata,3);
- }else if(substr($kata,0,2)=="ke"){
-  $kata = substr($kata,2);
- }
-}
-
-  return $kata;
-}
-//langkah 4 hapus second order prefiks (awalan kedua)
-function hapusawalan2($kata){
-if(cari($kata)!=1){
-  
- if(substr($kata,0,3)=="ber"){
-  $kata = substr($kata,3);
- }else if(substr($kata,0,3)=="bel"){
-  $kata = substr($kata,3);
- }else if(substr($kata,0,2)=="be"){
-  $kata = substr($kata,2);
- }else if(substr($kata,0,3)=="per" && strlen($kata) > 5){
-  $kata = substr($kata,3);
- }else if(substr($kata,0,2)=="pe"  && strlen($kata) > 5){
-  $kata = substr($kata,2);
- }else if(substr($kata,0,3)=="pel"  && strlen($kata) > 5){
-  $kata = substr($kata,3);
- }else if(substr($kata,0,2)=="se"  && strlen($kata) > 5){
-  $kata = substr($kata,2);
- }
-}
-
-  return $kata;
-}
-////langkah 5 hapus suffiks
-function hapusakhiran($kata){
-if(cari($kata)!=1){
-
- if (substr($kata, -3)== "kan" ){
-  $kata = substr($kata, 0, -3);
- }
- else if(substr($kata, -1)== "i" ){
-     $kata = substr($kata, 0, -1);
- }else if(substr($kata, -2)== "an"){
-  $kata = substr($kata, 0, -2);
- }
-} 
-
-  return $kata;
-}
-
-?> 
+	<?php
+		$endtime = microtime(true);
+		echo "Load time: ";
+		echo $endtime-$starttime."s";
+	?>
+	</footer>
+</body>
+</html>

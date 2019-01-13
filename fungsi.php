@@ -99,6 +99,7 @@
 					unset($results[$banned]);
 				}
 				$phrase = $this->porter($phrase);
+				// $phrase = $this->porterkamus($phrase);
 				if (!isset($results[$phrase])){
 					$results[$phrase] = 1;
 				} else {
@@ -108,7 +109,31 @@
 			array_multisort($results, SORT_DESC);
 			return $results;
 		}
-		public function porter($kataa){
+		public function listStemming($input){
+			$input = $this->tokenisasi($input);
+			$i=0;
+			$results[] = null;
+			$stop = null;
+			foreach ($input as $key=>$word) {
+				$phrase = strtolower($input[$key]);
+				$a = $this->stopwords();
+				foreach ($a as $banned){
+					if($banned == $phrase){
+						$stop = $banned;
+					}
+				}
+				if ($stop == $phrase){
+
+				} else {
+					// $phrase = $this->porterkamus($phrase);
+					$phrase = $this->porter($phrase);
+					$results[$i] = $phrase;
+					$i++;
+				}
+			}
+			return $results;
+		}
+		public function porter($kata){
 			// Porter stemming
 			// Langkah-Langkah Algortima pada Porter Stemmer.
 			// 1. Menghapus Partikel seperti: kah, lah, tah
@@ -124,15 +149,62 @@
 			// bug: kata menyenangkan
 
 			//fungsi substr(kata, mulai huruf ke, jumlah huruf)
-			
-			$kataa = $this->hapuspartikel($kataa);
-			$kataa = $this->hapuspp($kataa);
-			$kataa = $this->hapusawalan1($kataa);
-			$kataa = $this->hapusakhiran($kataa);
-			$kataa = $this->hapusawalan2($kataa);
 
-			return $kataa;
+			$kata = $this->hapuspartikel($kata);
+			$kata = $this->hapuspp($kata);
+
+			$kata1 = $kata;
+
+			$kata = $this->hapusawalan1($kata);
+			if($kata1==$kata){
+				$kata = $this->hapusawalan2($kata);
+				$kata = $this->hapusakhiran($kata);
+			} else {
+				$kata2 = $kata;
+				$kata = $this->hapusakhiran($kata);
+				if($kata2 = $kata){
+					$kata = $this->hapusawalan2($kata);
+				}
+			}
+			
+			
+			
+			return $kata;
 		  
+		}
+		public function porterkamus($kata){
+			if($this->cari($kata)!=1){
+				$kata = $this->hapuspartikel($kata);
+			}
+			if($this->cari($kata)!=1){
+				$kata = $this->hapuspp($kata);
+			}
+
+			$kata1 = $kata;
+
+			if($this->cari($kata)!=1){
+				$kata = $this->hapusawalan1($kata);
+			}
+
+			if($kata1==$kata){
+				if($this->cari($kata)!=1){
+					$kata = $this->hapusawalan2($kata);
+				}
+				if($this->cari($kata)!=1){
+					$kata = $this->hapusakhiran($kata);
+				}
+			} else {
+				$kata2 = $kata;
+				if($this->cari($kata)!=1){
+					$kata = $this->hapusakhiran($kata);
+				}
+				if($this->cari($kata)!=1){
+					if($kata2 = $kata){
+						$kata = $this->hapusawalan2($kata);
+					}
+				}
+			}
+			return $kata;			
 		}
 		public function cari($kata){
 			// $dbServer = "localhost";
@@ -155,10 +227,8 @@
 
 		//langkah 1 - hapus partikel
 		public function hapuspartikel($kata){
-			if($this->cari($kata)!=1){
-				if((substr($kata, -3) == 'kah' )||( substr($kata, -3) == 'lah' )||( substr($kata, -3) == 'pun' )){
-					$kata = substr($kata, 0, -3);   
-				}
+			if((substr($kata, -3) == 'kah' )||( substr($kata, -3) == 'lah' )||( substr($kata, -3) == 'pun' )){
+				$kata = substr($kata, 0, -3);   
 			}
 			return $kata;
 		}
@@ -179,58 +249,55 @@
 
 		//langkah 3 hapus first order prefiks (awalan pertama)
 		public function hapusawalan1($kata){
-			if($this->cari($kata)!=1){
-				if(substr($kata,0,4)=="meng"){
-					if(substr($kata,4,1)=="e"||substr($kata,4,1)=="u"){
-						$kata = substr($kata,4);
-					}else{
-						$kata = substr($kata,4);
-					}
-				}else if(substr($kata,0,4)=="meny"){
-					$kata = "s".substr($kata,4);
-				}else if(substr($kata,0,3)=="men"){
-					$kata = "t".substr($kata,3);
-				}else if(substr($kata,0,3)=="mem"){
-					if(substr($kata,3,1)=="a"){
-						$kata = "m".substr($kata,3);
-					} else if(substr($kata,3,2)=="in"){
-						$kata = "m".substr($kata,3);
-					} else if(substr($kata,3,1)=="i"){
-						$kata = "p".substr($kata,3);
-					} else{
-						$kata = substr($kata,3);
-					}
-				} else if(substr($kata,0,2)=="me"){
-					$kata = substr($kata,2);
-				} else if(substr($kata,0,4)=="peng"){
-					if(substr($kata,4,1)=="e" || substr($kata,4,1)=="a"){
-						$kata = "k".substr($kata,4);
-					}else{
-						$kata = substr($kata,4);
-					}
-				} else if(substr($kata,0,4)=="peny"){
-					$kata = "s".substr($kata,4);
-				}else if(substr($kata,0,3)=="pen"){
-					if(substr($kata,3,1)=="a" || substr($kata,3,1)=="i" || substr($kata,3,1)=="e" || substr($kata,3,1)=="u" || substr($kata,3,1)=="o"){
-						$kata = "t".substr($kata,3);
-					}else{
-						$kata = substr($kata,3);
-					}
-				}else if(substr($kata,0,3)=="pem"){
-					if(substr($kata,3,1)=="a" || substr($kata,3,1)=="i" || substr($kata,3,1)=="e" || substr($kata,3,1)=="u" || substr($kata,3,1)=="o"){
-						$kata = "p".substr($kata,3);
-					}else{
-						$kata = substr($kata,3);
-					}
-				}else if(substr($kata,0,2)=="di"){
-					$kata = substr($kata,2);
-				}else if(substr($kata,0,3)=="ter"){
-					$kata = substr($kata,3);
-				}else if(substr($kata,0,2)=="ke"){
-					$kata = substr($kata,2);
+			if(substr($kata,0,4)=="meng"){
+				if(substr($kata,4,1)=="e"||substr($kata,4,1)=="u"){
+					$kata = substr($kata,4);
+				}else{
+					$kata = substr($kata,4);
 				}
+			}else if(substr($kata,0,4)=="meny"){
+				$kata = "s".substr($kata,4);
+			}else if(substr($kata,0,3)=="men"){
+				$kata = "t".substr($kata,3);
+			}else if(substr($kata,0,3)=="mem"){
+				if(substr($kata,3,1)=="a"){
+					$kata = "m".substr($kata,3);
+				} else if(substr($kata,3,2)=="in"){
+					$kata = "m".substr($kata,3);
+				} else if(substr($kata,3,1)=="i"){
+					$kata = "p".substr($kata,3);
+				} else{
+					$kata = substr($kata,3);
+				}
+			} else if(substr($kata,0,2)=="me"){
+				$kata = substr($kata,2);
+			} else if(substr($kata,0,4)=="peng"){
+				if(substr($kata,4,1)=="e" || substr($kata,4,1)=="a"){
+					$kata = "k".substr($kata,4);
+				}else{
+					$kata = substr($kata,4);
+				}
+			} else if(substr($kata,0,4)=="peny"){
+				$kata = "s".substr($kata,4);
+			}else if(substr($kata,0,3)=="pen"){
+				if(substr($kata,3,1)=="a" || substr($kata,3,1)=="i" || substr($kata,3,1)=="e" || substr($kata,3,1)=="u" || substr($kata,3,1)=="o"){
+					$kata = "t".substr($kata,3);
+				}else{
+					$kata = substr($kata,3);
+				}
+			}else if(substr($kata,0,3)=="pem"){
+				if(substr($kata,3,1)=="a" || substr($kata,3,1)=="i" || substr($kata,3,1)=="e" || substr($kata,3,1)=="u" || substr($kata,3,1)=="o"){
+					$kata = "p".substr($kata,3);
+				}else{
+					$kata = substr($kata,3);
+				}
+			}else if(substr($kata,0,2)=="di"){
+				$kata = substr($kata,2);
+			}else if(substr($kata,0,3)=="ter"){
+				$kata = substr($kata,3);
+			}else if(substr($kata,0,2)=="ke"){
+				$kata = substr($kata,2);
 			}
-
 			return $kata;
 		}
 
@@ -238,43 +305,38 @@
 		//langkah 4 hapus second order prefiks (awalan kedua)
 		public function hapusawalan2($kata){
 			$kataasli = $kata;
-			if($this->cari($kata)!=1){
-				if(substr($kata,0,3)=="ber"){
-					$kata = substr($kata,3);
-					if($this->cari($kata)!=1){
-						$kata = $kataasli;
-						$kata = substr($kata,2);
-					}
-				}else if(substr($kata,0,3)=="bel"){
-					$kata = substr($kata,3);
-				}else if(substr($kata,0,2)=="be"){
-					$kata = substr($kata,2);
-				}else if(substr($kata,0,3)=="per" && strlen($kata) > 5){
-					$kata = substr($kata,3);
-				}else if(substr($kata,0,2)=="pe"  && strlen($kata) > 5){
-					$kata = substr($kata,2);
-				}else if(substr($kata,0,3)=="pel"  && strlen($kata) > 5){
-					$kata = substr($kata,3);
-				}else if(substr($kata,0,2)=="se"  && strlen($kata) > 5){
+			if(substr($kata,0,3)=="ber"){
+				$kata = substr($kata,3);
+				if($this->cari($kata)!=1){
+					$kata = $kataasli;
 					$kata = substr($kata,2);
 				}
+			}else if(substr($kata,0,3)=="bel"){
+				$kata = substr($kata,3);
+			}else if(substr($kata,0,2)=="be"){
+				$kata = substr($kata,2);
+			}else if(substr($kata,0,3)=="per" && strlen($kata) > 5){
+				$kata = substr($kata,3);
+			}else if(substr($kata,0,2)=="pe"  && strlen($kata) > 5){
+				$kata = substr($kata,2);
+			}else if(substr($kata,0,3)=="pel"  && strlen($kata) > 5){
+				$kata = substr($kata,3);
+			}else if(substr($kata,0,2)=="se"  && strlen($kata) > 5){
+				$kata = substr($kata,2);
 			}
-
 			return $kata;
 		}
 
 
 		////langkah 5 hapus suffiks
 		public function hapusakhiran($kata){
-			if($this->cari($kata)!=1){
-				if (substr($kata, -3)== "kan" ){
-					$kata = substr($kata, 0, -3);
-				} else if(substr($kata, -1)== "i" ){
-					$kata = substr($kata, 0, -1);
-				} else if(substr($kata, -2)== "an"){
-					$kata = substr($kata, 0, -2);
-				}
-			} 
+			if (substr($kata, -3)== "kan" ){
+				$kata = substr($kata, 0, -3);
+			} else if(substr($kata, -1)== "i" ){
+				$kata = substr($kata, 0, -1);
+			} else if(substr($kata, -2)== "an"){
+				$kata = substr($kata, 0, -2);
+			}
 			return $kata;
 		}
 	}
